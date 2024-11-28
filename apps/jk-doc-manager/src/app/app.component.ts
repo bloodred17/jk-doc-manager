@@ -7,9 +7,6 @@ import { RouterModule } from '@angular/router';
   selector: 'app-root',
   template: `
     <router-outlet></router-outlet>
-    <h1 class="text-3xl underline font-inter">
-      Hello World! How are you? Have a good day.
-    </h1>
   `,
 })
 export class AppComponent {
