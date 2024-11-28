@@ -1,0 +1,33 @@
+{
+  "name": "jk-doc-manager-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/jk-doc-manager-backend/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "jk-doc-manager-backend:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "jk-doc-manager-backend:build:development"
+        },
+        "production": {
+          "buildTarget": "jk-doc-manager-backend:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/jk-doc-manager-backend/jest.config.ts"
+      }
+    }
+  }
+}
