@@ -1,28 +1,28 @@
 {
-  "name": "jk-dock-manager",
+  "name": "jk-doc-manager",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/jk-dock-manager/src",
+  "sourceRoot": "apps/jk-doc-manager/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/jk-dock-manager",
-        "index": "apps/jk-dock-manager/src/index.html",
-        "main": "apps/jk-dock-manager/src/main.ts",
+        "outputPath": "dist/apps/jk-doc-manager",
+        "index": "apps/jk-doc-manager/src/index.html",
+        "main": "apps/jk-doc-manager/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/jk-dock-manager/tsconfig.app.json",
+        "tsConfig": "apps/jk-doc-manager/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/jk-dock-manager/public"
+            "input": "apps/jk-doc-manager/public"
           }
         ],
-        "styles": ["apps/jk-dock-manager/src/styles.scss"],
+        "styles": ["apps/jk-doc-manager/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -56,10 +56,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "jk-dock-manager:build:production"
+          "buildTarget": "jk-doc-manager:build:production"
         },
         "development": {
-          "buildTarget": "jk-dock-manager:build:development"
+          "buildTarget": "jk-doc-manager:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -67,7 +67,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "jk-dock-manager:build"
+        "buildTarget": "jk-doc-manager:build"
       }
     },
     "lint": {
@@ -77,13 +77,13 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/jk-dock-manager/jest.config.ts"
+        "jestConfig": "apps/jk-doc-manager/jest.config.ts"
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "jk-dock-manager:build",
+        "buildTarget": "jk-doc-manager:build",
         "port": 4200,
         "spa": true
       }

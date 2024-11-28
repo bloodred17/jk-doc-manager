@@ -15,13 +15,13 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome jk-dock-manager'
+      'Welcome jk-doc-manager'
     );
   });
 
-  it(`should have as title 'jk-dock-manager'`, () => {
+  it(`should have as title 'jk-doc-manager'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('jk-dock-manager');
+    expect(app.title).toEqual('jk-doc-manager');
   });
 });

@@ -1,8 +1,8 @@
 export default {
-  displayName: 'jk-dock-manager',
+  displayName: 'jk-doc-manager',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/jk-dock-manager',
+  coverageDirectory: '../../coverage/apps/jk-doc-manager',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
