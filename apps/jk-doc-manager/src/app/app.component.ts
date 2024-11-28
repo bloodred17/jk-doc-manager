@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   standalone: true,
@@ -11,4 +12,6 @@ import { RouterModule } from '@angular/router';
 })
 export class AppComponent {
   title = 'jk-doc-manager';
+  constructor(private themeService: ThemeService) {
+  }
 }

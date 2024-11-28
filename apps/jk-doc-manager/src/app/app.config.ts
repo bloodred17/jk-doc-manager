@@ -1,12 +1,14 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
-// import { Home, LucideAngularModule } from 'lucide-angular';
+import { provideHttpClient } from '@angular/common/http';
+import { provideAngularSvgIcon } from 'angular-svg-icon';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // importProvidersFrom(LucideAngularModule.pick({ Home })),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
+    provideHttpClient(),
+    provideAngularSvgIcon()
   ],
 };
