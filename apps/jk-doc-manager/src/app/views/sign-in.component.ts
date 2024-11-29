@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,15 +15,16 @@ import { SvgIconComponent } from 'angular-svg-icon';
           style="background-image: url('/sign-in.jpg')"
           class="bg-cover rounded-l-lg"
         ></div>
-        <div class="p-8 xl:p-12 space-y-4">
+        <div class="p-8 xl:p-12 space-y-4" [formGroup]="signInForm">
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text">Username</span>
+              <span class="label-text">Email</span>
             </div>
             <input
               type="text"
               placeholder="Type here"
               class="input input-bordered w-full"
+              formControlName="email"
             />
           </label>
 
@@ -34,13 +36,19 @@ import { SvgIconComponent } from 'angular-svg-icon';
               type="password"
               placeholder="Password"
               class="input input-bordered w-full"
+              formControlName="password"
             />
           </label>
 
           <div class="flex justify-between">
             <div class="form-control">
               <label class="label cursor-pointer space-x-2">
-                <input type="checkbox" class="toggle" checked="checked" />
+                <input
+                  type="checkbox"
+                  class="toggle"
+                  checked="checked"
+                  formControlName="rememberMe"
+                />
                 <span class="label-text">Remember me</span>
               </label>
             </div>
@@ -73,14 +81,22 @@ import { SvgIconComponent } from 'angular-svg-icon';
       </div>
     </div>
   `,
-  imports: [SvgIconComponent],
+  imports: [SvgIconComponent, ReactiveFormsModule],
   standalone: true,
 })
 export class SignInComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
+  signInForm = new FormGroup({
+    email: new FormControl('', []),
+    password: new FormControl('', []),
+    rememberMe: new FormControl(false),
+  });
+
   authenticate() {
+    console.log(this.signInForm);
+
     this.authService.isAuthenticated = true;
     this.router.navigate(['/']);
   }
