@@ -15,7 +15,7 @@ export class AppStateService {
   appMenu = [
     {
       label: 'History',
-      route: '/chats',
+      route: '/history',
       icon: FileClock,
     },
     {
