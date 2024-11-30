@@ -10,10 +10,10 @@ export enum ChatDirection {
   standalone: true,
   selector: 'app-chat',
   template: `
-    <div class="chat z-0" [ngClass]="chatDirection">
+    <div class="relative chat z-0" [ngClass]="chatDirection">
       @if (avatar && displayAvatar) {
       <div class="chat-image avatar">
-        <div class="w-10 rounded-full">
+        <div class="w-12 p-1 rounded-full border">
           <img [alt]="avatar.alt" [src]="avatar.src" />
         </div>
       </div>

@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
+import { AppStateService } from '../services/app-state.service';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   standalone: true,
@@ -29,14 +32,26 @@ import { Component } from '@angular/core';
             tabindex="0"
             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
-            <li><a>Homepage</a></li>
-            <li><a>Portfolio</a></li>
-            <li><a>About</a></li>
+            @for (menuItem of appStateService.appMenu; track menuItem) {
+            <li>
+              <a [routerLink]="menuItem.route" class="flex justify-between">
+                <span>
+                  {{ menuItem.label }}
+                </span>
+                @if (menuItem?.icon) {
+                <lucide-icon
+                  [img]="menuItem.icon"
+                  class="w-4 h-4"
+                ></lucide-icon>
+                }
+              </a>
+            </li>
+            }
           </ul>
         </div>
       </div>
       <div class="navbar-center">
-        <a class="text-xl font-inter">
+        <a class="text-xl font-inter cursor-pointer" [routerLink]="['/']">
           <span class="text-pink-600 text-bold">#</span>
           <span>DocMan</span>
         </a>
@@ -80,5 +95,16 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
+  host: {
+    '[class]': '_class()',
+  },
+  imports: [RouterLink, LucideAngularModule],
 })
-export class NavbarComponent {}
+export class NavbarComponent {
+  appStateService = inject(AppStateService);
+  readonly _class = signal('');
+  @Input()
+  set class(classes: string) {
+    this._class.set(classes);
+  }
+}

@@ -6,7 +6,7 @@ import { NavbarComponent } from '../ui/navbar.component';
   standalone: true,
   selector: 'app-main-layout',
   template: `
-    <app-navbar></app-navbar>
+    <app-navbar class="sticky top-0 z-50"></app-navbar>
     <router-outlet></router-outlet>
   `,
   imports: [RouterOutlet, NavbarComponent],

@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { FileClock, MessageSquareDiff, Upload } from 'lucide-angular';
 
 export enum AppMode {
   Upload = 'upload',
@@ -9,5 +10,23 @@ export enum AppMode {
   providedIn: 'root',
 })
 export class AppStateService {
-  appState = signal<AppMode>(AppMode.Upload);
+  appMode = signal<AppMode>(AppMode.Upload);
+
+  appMenu = [
+    {
+      label: 'History',
+      route: '/chats',
+      icon: FileClock,
+    },
+    {
+      label: 'New Chat',
+      route: '/new-chat',
+      icon: MessageSquareDiff,
+    },
+    {
+      label: 'Upload Document',
+      route: '/',
+      icon: Upload,
+    },
+  ];
 }
