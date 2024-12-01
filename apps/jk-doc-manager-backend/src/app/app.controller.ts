@@ -1,8 +1,6 @@
 import {Controller, Get, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
-import { AppService } from './app.service';
 import { FirebaseService } from './firebase.service';
 import {FileInterceptor} from "@nestjs/platform-express";
-import {Express} from "express";
 
 @Controller()
 export class AppController {
@@ -18,6 +16,8 @@ export class AppController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: File) {
-    console.log(file);
+    return {
+      result: this.firebaseService.uploadToFirebase(file, 'abc.pdf')
+    }
   }
 }

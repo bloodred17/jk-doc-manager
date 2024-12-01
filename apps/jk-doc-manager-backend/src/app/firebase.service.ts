@@ -20,4 +20,35 @@ export class FirebaseService {
   getStorage() {
     return getStorage().bucket().name;
   }
+
+  async uploadToFirebase(file: File, name: string): Promise<string> {
+    try {
+      const bucket = getStorage().bucket();
+      const timestamp = Date.now();
+      const fileName = `pdfs/${timestamp}-${name}`;
+
+      // Upload the file
+      await bucket.file(fileName).save((file as any).buffer, {
+        metadata: {
+          contentType: 'application/pdf',
+        },
+      });
+
+      // Get signed URL (or make public and get public URL)
+      const [url] = await bucket.file(fileName).getSignedUrl({
+        action: 'read',
+        expires: '03-01-2025', // Set an expiration date
+      });
+
+      return url;
+
+      // Alternatively, if you want a public URL:
+      // await bucket.file(fileName).makePublic();
+      // return `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw new Error(`Could not upload file: ${error.message}`);
+    }
+  }
 }
