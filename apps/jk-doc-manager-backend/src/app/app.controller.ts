@@ -1,12 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { FirebaseService } from './firebase.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly firebaseService: FirebaseService) {}
 
   @Get()
   getData() {
-    return this.appService.getData();
+    return {
+      message: this.firebaseService.getStorage(),
+    };
   }
 }
