@@ -20,7 +20,7 @@ export class AppStateService {
     },
     {
       label: 'New Chat',
-      route: '/new-chat',
+      route: '/new',
       icon: MessageSquareDiff,
     },
     {

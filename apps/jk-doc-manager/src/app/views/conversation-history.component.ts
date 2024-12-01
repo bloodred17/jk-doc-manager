@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
   selector: 'app-conversation-history',
   template: `
     <div class="flex justify-center p-2 sm:p-4 md:p-12">
-      <div class="card dark:bg-base-300 sm:w-[60vw] shadow">
+      <div class="card  sm:w-[60vw] shadow">
         <ul class="card-body">
           @for (row of data; track row) {
           <li class="flex justify-between group">

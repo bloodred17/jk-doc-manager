@@ -6,6 +6,7 @@ import { MainLayoutComponent } from './layouts/main-layout.component';
 import { ConversationComponent } from './views/conversation.component';
 import { ConversationHistoryComponent } from './views/conversation-history.component';
 import { UploadedFilesComponent } from './views/uploaded-files.component';
+import { NewConversationComponent } from './views/new-conversation.component';
 
 export const appRoutes: Route[] = [
   {
@@ -30,8 +31,8 @@ export const appRoutes: Route[] = [
         component: ConversationHistoryComponent,
       },
       {
-        path: 'uploaded',
-        component: UploadedFilesComponent,
+        path: 'new',
+        component: NewConversationComponent,
       },
     ],
   },
