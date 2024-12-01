@@ -15,9 +15,9 @@ export class AppController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: File) {
+  async uploadFile(@UploadedFile() file: File) {
     return {
-      result: this.firebaseService.uploadToFirebase(file, 'abc.pdf')
+      result: await this.firebaseService.uploadToFirebase(file, 'abc.pdf')
     }
   }
 }
