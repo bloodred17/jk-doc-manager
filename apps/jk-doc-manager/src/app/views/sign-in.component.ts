@@ -3,6 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -64,7 +66,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
             Login
           </button>
 
-          <button class="btn w-full space-x-1" (click)="authenticate()">
+          <button class="btn w-full space-x-1" (click)="check()">
             <svg-icon
               src="/google.svg"
               [svgStyle]="{ 'width.px': 20 }"
@@ -86,6 +88,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class SignInComponent {
   authService = inject(AuthService);
+  firebaseService = inject(FirebaseService);
+
   router = inject(Router);
 
   signInForm = new FormGroup({
@@ -94,10 +98,43 @@ export class SignInComponent {
     rememberMe: new FormControl(false),
   });
 
+  token = '';
+
   authenticate() {
     console.log(this.signInForm);
+    // if (this.signInForm.value.email && this.signInForm.value.password) {
+    const auth = getAuth();
+    signInWithEmailAndPassword(
+      auth,
+      // this.signInForm.value.email,
+      // this.signInForm.value.password
+      'ankur.611@gmail.com',
+      'some_password'
+    ).then(async (cred) => {
+      const { user } = cred;
+      const _cred = JSON.parse(JSON.stringify(cred));
+      console.log(_cred);
+      const _idToken = _cred?._tokenResponse?.idToken;
+      const idToken = await user.getIdToken();
+      console.log(_idToken);
+      console.log(idToken);
+      console.log(idToken === _idToken);
+      const csrfToken = 'abcd123';
+      console.log(user);
+      this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
+        console.log(res);
+        this.token = res?.data;
+      });
+    });
+    // }
+    // this.authService.isAuthenticated = true;
+    // this.router.navigate(['/']);
+  }
 
-    this.authService.isAuthenticated = true;
-    this.router.navigate(['/']);
+  check() {
+    console.log(this.token);
+    this.authService.check({ token: this.token }).subscribe((res: any) => {
+      console.log(res);
+    });
   }
 }
