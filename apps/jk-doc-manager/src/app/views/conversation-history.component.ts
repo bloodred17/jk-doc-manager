@@ -5,36 +5,6 @@ import { DatePipe } from '@angular/common';
   standalone: true,
   selector: 'app-conversation-history',
   template: `
-    <!--    <div class="overflow-x-auto">-->
-    <!--      <table class="table table-xs table-pin-rows table-pin-cols">-->
-    <!--        <thead>-->
-    <!--          <tr>-->
-    <!--            &lt;!&ndash;            <th>ConversationID</th>&ndash;&gt;-->
-    <!--            <td>Name</td>-->
-    <!--            <td>Date</td>-->
-    <!--            <td>File</td>-->
-    <!--          </tr>-->
-    <!--        </thead>-->
-    <!--        <tbody>-->
-    <!--          @for (row of data; track row) {-->
-    <!--          <tr>-->
-    <!--            <td>{{ row.name }}</td>-->
-    <!--            <td>{{ row.date }}</td>-->
-    <!--            <td>{{ row.file }}</td>-->
-    <!--          </tr>-->
-    <!--          }-->
-    <!--        </tbody>-->
-    <!--        <tfoot>-->
-    <!--          <tr>-->
-    <!--            &lt;!&ndash;            <th></th>&ndash;&gt;-->
-    <!--            <td>Name</td>-->
-    <!--            <td>Date</td>-->
-    <!--            <td>File</td>-->
-    <!--          </tr>-->
-    <!--        </tfoot>-->
-    <!--      </table>-->
-    <!--    </div>-->
-
     <div class="flex justify-center p-2 sm:p-4 md:p-12">
       <div class="card bg-base-100 sm:w-[60vw] shadow">
         <ul class="card-body gap-6">
