@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ThemeService {
-  private isDarkMode = new BehaviorSubject<boolean>(false);
+  isDarkMode = new BehaviorSubject<boolean>(false);
   isDarkMode$ = this.isDarkMode.asObservable();
 
   constructor() {
@@ -18,6 +18,9 @@ export class ThemeService {
 
   private setTheme(isDark: boolean) {
     this.isDarkMode.next(isDark);
+  }
+
+  setDomTheme(isDark: boolean) {
     document.documentElement.setAttribute('data-theme', isDark ? 'dracula' : 'cmyk');
   }
 }

@@ -17,5 +17,6 @@ module.exports = {
   plugins: [require('daisyui'),],
   daisyui: {
     themes: ['cmyk', 'dracula']
-  }
+  },
+  darkMode: ['selector', '[data-theme="dracula"]']
 };
