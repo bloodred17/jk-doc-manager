@@ -2,7 +2,11 @@
   "name": "@jk-doc-manager/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:backend": "nx build jk-doc-manager-backend",
+    "start:backend": "node dist/apps/jk-doc-manager-backend/main.js",
+    "build:frontend": "nx build jk-doc-manager"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~18.2.0",
