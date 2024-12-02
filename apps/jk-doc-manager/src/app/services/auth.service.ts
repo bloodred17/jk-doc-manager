@@ -2,12 +2,13 @@ import { effect, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly domain = 'http://localhost:3000';
+  private readonly domain = environment.apiUrl;
   isAuthenticated = signal(false);
   sessionID = '';
   router = inject(Router);

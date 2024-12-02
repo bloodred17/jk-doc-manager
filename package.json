@@ -7,7 +7,7 @@
     "backend:start": "node dist/apps/jk-doc-manager-backend/main.js",
     "frontend:build:prod": "nx build jk-doc-manager --configuration=production"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "~18.2.0",
     "@angular/common": "~18.2.0",

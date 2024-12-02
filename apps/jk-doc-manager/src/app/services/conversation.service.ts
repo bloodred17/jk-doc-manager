@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, Observer } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConversationService {
-  private readonly domain = 'http://localhost:3000';
+  private readonly domain = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
