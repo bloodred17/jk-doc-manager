@@ -35,9 +35,15 @@ export class AppController {
     @Query('uid') uid: string
   ) {
     try {
+      if (name.split('.')?.at(-1) !== 'pdf') {
+        throw new Error('Can only upload PDF files less than 5mb');
+      }
       const user = await getAuth().getUser(uid);
       if (!name) {
         throw new Error('Name is required');
+      }
+      if (!uid) {
+        throw new Error('uid is required');
       }
       return {
         success: true,
