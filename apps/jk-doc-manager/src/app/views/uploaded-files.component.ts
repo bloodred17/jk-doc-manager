@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   LucideAngularModule,
   MessageSquarePlus,
@@ -6,6 +6,7 @@ import {
   Trash,
 } from 'lucide-angular';
 import { DatePipe } from '@angular/common';
+import { ConversationService } from '../services/conversation.service';
 
 @Component({
   standalone: true,
@@ -19,7 +20,10 @@ import { DatePipe } from '@angular/common';
             <td>Name</td>
             <td>Date</td>
             <td class="flex justify-end">
-              <button class="btn btn-xs btn-secondary">
+              <button
+                class="btn btn-xs btn-secondary"
+                (click)="startNewConversation()"
+              >
                 <lucide-icon
                   [img]="Plus"
                   class="h-4 w-4 stroke-white"
@@ -56,6 +60,7 @@ import { DatePipe } from '@angular/common';
   imports: [LucideAngularModule, DatePipe],
 })
 export class UploadedFilesComponent {
+  conversationService = inject(ConversationService);
   data = [
     {
       filename: 'file.txt',
@@ -66,4 +71,10 @@ export class UploadedFilesComponent {
   protected readonly MessageSquarePlus = MessageSquarePlus;
   protected readonly Trash = Trash;
   protected readonly Plus = Plus;
+
+  startNewConversation() {
+    this.conversationService.createNewConversation().subscribe((res) => {
+      console.log(res);
+    });
+  }
 }

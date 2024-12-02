@@ -2,9 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, Observer } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ConversationService {
+  private readonly domain = 'http://localhost:3000';
+
   constructor(private http: HttpClient) {}
+
+  createNewConversation() {
+    return this.http.post(this.domain + '/api/conversation', {
+      name: 'New Conversation',
+      description: 'New Conversation Description',
+    });
+  }
 
   getConversations() {
     return [];

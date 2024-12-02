@@ -10,7 +10,9 @@ import { DatePipe } from '@angular/common';
         <ul class="card-body">
           @for (row of data; track row) {
           <li class="flex justify-between group">
-            <a class="w-full cursor-pointer rounded-sm p-4 group-hover:bg-base-200 rounded-xl">
+            <a
+              class="w-full cursor-pointer rounded-sm p-4 group-hover:bg-base-200 rounded-xl"
+            >
               <div class="sm:flex justify-between w-full">
                 <div
                   class="text-2xl font-inter border-b border-b-transparent group-hover:border-b-secondary border-b-2 transition-all delay-75"
