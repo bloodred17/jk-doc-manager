@@ -15,7 +15,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { UserService } from './user.service';
 import { Mongodb } from '../mongodb';
 import { User } from './user.schema';
-import { FirebaseAuthGuard } from './firebase-auth.guard';
+import { FirebaseAuthGuard } from '../firebase-auth.guard';
 
 interface LoginDto {
   email: string;
