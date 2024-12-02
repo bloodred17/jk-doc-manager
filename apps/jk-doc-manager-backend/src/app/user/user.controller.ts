@@ -2,12 +2,15 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Post,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { getAuth } from 'firebase-admin/auth';
 import { UserService } from './user.service';
 import { Mongodb } from '../mongodb';
@@ -40,7 +43,12 @@ export class UserController {
       if (!connection) {
         throw new Error('Connection not found');
       }
-      const createdFirebaseUser = await getAuth().createUser(body);
+      const createdFirebaseUser = await getAuth().createUser({
+        email: body.email,
+        emailVerified: true,
+        password: body.password,
+        displayName: body.displayName,
+      });
       const user = new User({
         uid: createdFirebaseUser.uid,
         name: createdFirebaseUser.displayName,
@@ -88,9 +96,31 @@ export class UserController {
       });
     } catch (e) {
       console.log(e);
-      return {
+      res.send({
+        success: false,
         error: e?.toString(),
+      });
+    }
+  }
+
+  @Get('logout')
+  @UseGuards(FirebaseAuthGuard)
+  async logout(@Req() req: Request) {
+    try {
+      const auth = getAuth();
+      const sessionCookie = req?.headers?.['x-session-id'] as string;
+      const decodedClaims = await auth.verifySessionCookie(sessionCookie);
+      await auth.revokeRefreshTokens(decodedClaims.sub);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Successfully logged out',
       };
+    } catch (error) {
+      throw new HttpException(
+        'Failed to logout',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
