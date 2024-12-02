@@ -26,6 +26,10 @@ export class ConversationService {
     return this.http.get(this.domain + '/api/conversation/' + id);
   }
 
+  deleteConversation(id: string) {
+    return this.http.delete(this.domain + '/api/conversation/' + id);
+  }
+
   sendMessage(conversationId: string) {
     // send logic here
 

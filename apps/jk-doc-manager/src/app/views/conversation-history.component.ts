@@ -1,17 +1,26 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
+import { Cross, LucideAngularModule, Trash } from 'lucide-angular';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-conversation-history',
   template: `
     <div class="flex justify-center p-2 sm:p-4 md:p-12">
-      <div class="card  sm:w-[60vw] shadow">
+      <div class="card dark:bg-base-300 sm:w-[60vw] shadow">
         <ul class="card-body">
           @for (row of conversations(); track row) {
-          <li class="flex justify-between group">
+          <li class="flex justify-between group relative">
+            <button
+              (click)="deleteConversation(row?._id)"
+              class="absolute -top-0 -right-0 btn btn-xs btn-circle btn-error invisible group-hover:visible"
+            >
+              <lucide-icon [img]="Trash" class="h-3 w-3"></lucide-icon>
+            </button>
             <a
+              [routerLink]="['/ask', row._id]"
               class="w-full cursor-pointer rounded-sm p-4 group-hover:bg-base-200 rounded-xl"
             >
               <div class="sm:flex justify-between w-full">
@@ -36,7 +45,7 @@ import { ConversationService } from '../services/conversation.service';
       </div>
     </div>
   `,
-  imports: [DatePipe],
+  imports: [DatePipe, LucideAngularModule, RouterLink],
 })
 export class ConversationHistoryComponent implements OnInit {
   conversationService = inject(ConversationService);
@@ -49,4 +58,15 @@ export class ConversationHistoryComponent implements OnInit {
         this.conversations.set(conversations?.data);
       });
   }
+
+  deleteConversation(id: string) {
+    this.conversationService.deleteConversation(id).subscribe((res) => {
+      console.log(res);
+      this.conversations.set(
+        this.conversations().filter((conversation) => conversation._id !== id)
+      );
+    });
+  }
+
+  protected readonly Trash = Trash;
 }
