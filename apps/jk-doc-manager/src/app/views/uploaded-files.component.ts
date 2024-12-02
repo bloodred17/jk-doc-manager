@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
 import { Router, RouterLink } from '@angular/router';
 import { FileService } from '../services/file.service';
+import { FileTrimPipe } from '../pipes/file-trim.pipe';
 
 @Component({
   standalone: true,
@@ -34,8 +35,15 @@ import { FileService } from '../services/file.service';
         <tbody>
           @for (row of files; track row) {
           <tr>
-            <td>{{ row.name }}</td>
-            <td class="invisible md:visible">{{ row.url }}</td>
+            <td>{{ row.name | fileTrim }}</td>
+            <td class="invisible md:visible">
+              <a
+                class="text-primary underline"
+                [href]="row.url"
+                target="_blank"
+                >{{ row.url }}</a
+              >
+            </td>
             <!--            <td>{{ row.uploadedOn | date : 'MMM, dd YYYY - HH:mm' }}</td>-->
             <td class="flex justify-end gap-1">
               <button
@@ -60,7 +68,7 @@ import { FileService } from '../services/file.service';
       </table>
     </div>
   `,
-  imports: [LucideAngularModule, DatePipe, RouterLink],
+  imports: [LucideAngularModule, DatePipe, RouterLink, FileTrimPipe],
 })
 export class UploadedFilesComponent implements OnInit {
   conversationService = inject(ConversationService);
