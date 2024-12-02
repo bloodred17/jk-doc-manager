@@ -23,6 +23,9 @@ export class FileService {
   }
 
   uploadFile(formData: FormData, name: string, uid: string): Observable<any> {
+    if (!name) {
+      throw new Error('Can not upload without a valid name');
+    }
     if (!uid) {
       throw new Error('Can not upload without a valid uid');
     }
