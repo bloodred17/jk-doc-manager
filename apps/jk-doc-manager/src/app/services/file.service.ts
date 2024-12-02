@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileService {
-  private domain = 'http://localhost:3000';
+  private readonly domain = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
