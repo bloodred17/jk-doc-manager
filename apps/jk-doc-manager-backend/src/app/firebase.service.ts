@@ -21,11 +21,15 @@ export class FirebaseService {
     return getStorage().bucket().name;
   }
 
-  async uploadToFirebase(file: File, name: string): Promise<string> {
+  async uploadToFirebase(
+    file: File,
+    name: string,
+    email: string
+  ): Promise<string> {
     try {
       const bucket = getStorage().bucket();
       const timestamp = Date.now();
-      const fileName = `pdfs/${timestamp}-${name}`;
+      const fileName = `${email}/${timestamp}-${name}`;
 
       await bucket.file(fileName).save((file as any).buffer, {
         metadata: {
