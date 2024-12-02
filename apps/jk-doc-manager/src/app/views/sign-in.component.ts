@@ -126,7 +126,7 @@ export class SignInComponent {
       const { user } = cred;
       const idToken = await user.getIdToken();
       const csrfToken = 'abcd123';
-
+      localStorage.setItem('user', JSON.stringify(user));
       this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
         this.router.navigate(['/']);
       });

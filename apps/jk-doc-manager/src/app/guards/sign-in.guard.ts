@@ -18,6 +18,7 @@ export const signInGuard: CanActivateFn = (
   if (authService.isAuthenticated()) {
     return true;
   }
+  authService.checkSession().subscribe();
   return new RedirectCommand(loginPath, {
     skipLocationChange: true,
   });
