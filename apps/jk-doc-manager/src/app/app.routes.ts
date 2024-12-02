@@ -7,16 +7,21 @@ import { ConversationComponent } from './views/conversation.component';
 import { ConversationHistoryComponent } from './views/conversation-history.component';
 import { UploadedFilesComponent } from './views/uploaded-files.component';
 import { NewConversationComponent } from './views/new-conversation.component';
+import { SignUpComponent } from './views/sign-up.component';
 
 export const appRoutes: Route[] = [
   {
-    path: 'login',
+    path: 'sign-in',
     component: SignInComponent,
+  },
+  {
+    path: 'sign-up',
+    component: SignUpComponent,
   },
   {
     path: '',
     component: MainLayoutComponent,
-    // canActivateChild: [signInGuard],
+    canActivate: [signInGuard],
     children: [
       {
         path: '',

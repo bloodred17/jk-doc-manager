@@ -1,9 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  getIdToken,
+} from 'firebase/auth';
 import { FirebaseService } from '../services/firebase.service';
 
 @Component({
@@ -66,24 +72,30 @@ import { FirebaseService } from '../services/firebase.service';
             Login
           </button>
 
-          <button class="btn w-full space-x-1" (click)="check()">
+          <button
+            class="btn w-full space-x-1 bg-base-100"
+            (click)="signInWithGoogle()"
+          >
             <svg-icon
               src="/google.svg"
               [svgStyle]="{ 'width.px': 20 }"
             ></svg-icon>
-            <span>Login with Google</span>
+            <span>Sign In with Google</span>
           </button>
 
           <div class="flex justify-end">
-            <div class="font-inter text-sm cursor-pointer hover:underline">
+            <a
+              class="font-inter text-sm cursor-pointer hover:underline"
+              [routerLink]="['/sign-up']"
+            >
               Create New
-            </div>
+            </a>
           </div>
         </div>
       </div>
     </div>
   `,
-  imports: [SvgIconComponent, ReactiveFormsModule],
+  imports: [SvgIconComponent, ReactiveFormsModule, RouterLink],
   standalone: true,
 })
 export class SignInComponent {
@@ -101,9 +113,9 @@ export class SignInComponent {
   token = '';
 
   authenticate() {
+    const auth = getAuth();
     console.log(this.signInForm);
     // if (this.signInForm.value.email && this.signInForm.value.password) {
-    const auth = getAuth();
     signInWithEmailAndPassword(
       auth,
       // this.signInForm.value.email,
@@ -112,29 +124,25 @@ export class SignInComponent {
       'some_password'
     ).then(async (cred) => {
       const { user } = cred;
-      const _cred = JSON.parse(JSON.stringify(cred));
-      console.log(_cred);
-      const _idToken = _cred?._tokenResponse?.idToken;
       const idToken = await user.getIdToken();
-      console.log(_idToken);
-      console.log(idToken);
-      console.log(idToken === _idToken);
       const csrfToken = 'abcd123';
-      console.log(user);
+
       this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
-        console.log(res);
-        this.token = res?.data;
+        this.router.navigate(['/']);
       });
     });
     // }
-    // this.authService.isAuthenticated = true;
-    // this.router.navigate(['/']);
   }
 
-  check() {
-    console.log(this.token);
-    this.authService.check({ token: this.token }).subscribe((res: any) => {
-      console.log(res);
+  signInWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    signInWithPopup(auth, provider).then(async (result) => {
+      const idToken = await getIdToken(result.user);
+      const csrfToken = 'abcd123';
+      this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
+        this.router.navigate(['/']);
+      });
     });
   }
 }
