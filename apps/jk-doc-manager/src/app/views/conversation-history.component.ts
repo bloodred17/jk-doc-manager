@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
 import { Cross, LucideAngularModule, Trash } from 'lucide-angular';
 import { RouterLink } from '@angular/router';
+import { FileTrimPipe } from '../pipes/file-trim.pipe';
 
 @Component({
   standalone: true,
@@ -47,7 +48,7 @@ import { RouterLink } from '@angular/router';
                 <div
                   class="font-mono text-primary group-hover:text-secondary self-center"
                 >
-                  {{ row.file }}
+                  {{ row.file | fileTrim }}
                 </div>
               </div>
               <div class="text-sm text-gray-400 mt-0.5">
@@ -60,7 +61,7 @@ import { RouterLink } from '@angular/router';
       </div>
     </div>
   `,
-  imports: [DatePipe, LucideAngularModule, RouterLink],
+  imports: [DatePipe, LucideAngularModule, RouterLink, FileTrimPipe],
 })
 export class ConversationHistoryComponent implements OnInit {
   conversationService = inject(ConversationService);
