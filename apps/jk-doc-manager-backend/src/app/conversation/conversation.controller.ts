@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   UseGuards,
@@ -29,6 +30,52 @@ export class ConversationController {
       return {
         success: true,
         conversation,
+      };
+    } catch (e) {
+      return {
+        success: false,
+        error: e?.toString(),
+      };
+    }
+  }
+
+  @Get()
+  @UseGuards(FirebaseAuthGuard)
+  async getConversations() {
+    try {
+      const connection =
+        Mongodb.getInstance<Mongodb>(Mongodb).getClient('test');
+      if (!connection) {
+        throw new Error('Connection not found');
+      }
+      const result = await Conversation.model().find({});
+      return {
+        success: true,
+        data: result,
+        description: 'Conversations fetched successfully',
+      };
+    } catch (e) {
+      return {
+        success: false,
+        error: e?.toString(),
+      };
+    }
+  }
+
+  @Get(':id')
+  @UseGuards(FirebaseAuthGuard)
+  async getConversation(@Param('id') id: string) {
+    try {
+      const connection =
+        Mongodb.getInstance<Mongodb>(Mongodb).getClient('test');
+      if (!connection) {
+        throw new Error('Connection not found');
+      }
+      const result = await Conversation.model().findOne({ _id: id });
+      return {
+        success: true,
+        data: result,
+        description: 'Conversations fetched successfully',
       };
     } catch (e) {
       return {
