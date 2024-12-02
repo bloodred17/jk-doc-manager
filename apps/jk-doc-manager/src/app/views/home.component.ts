@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { LucideAngularModule, CloudUpload } from 'lucide-angular';
+import { LucideAngularModule, CloudUpload, Info } from 'lucide-angular';
 import { FileUploadComponent } from '../ui/file-upload.component';
 import { ChatComponent, ChatDirection } from '../ui/chat.component';
 import { FileService } from '../services/file.service';
@@ -12,12 +12,21 @@ import { AuthService } from '../services/auth.service';
     <div class="flex flex-col justify-center items-center h-[91vh] gap-8">
       <!--      <lucide-icon [img]="Home" class="my-icon"></lucide-icon>-->
       <span class="font-inter text-2xl">Start by uploading a document</span>
+
       <label class="form-control w-full max-w-xs">
         <input
           type="file"
           class="file-input file-input-bordered w-full max-w-xs"
           (change)="onSingleFileSelect($event)"
         />
+        <div class="label">
+          <div class="flex gap-2 items-center">
+            <lucide-icon [img]="Info" class="h-4 w-4"></lucide-icon>
+            <span class="font-inter text-xs dark:text-gray-100 text-gray-600">
+              PDF files less than 5mb
+            </span>
+          </div>
+        </div>
       </label>
       <button class="btn btn-primary" (click)="uploadSingleFile()">
         <lucide-icon [img]="CloudUpload"></lucide-icon>
@@ -88,4 +97,6 @@ export class HomeComponent {
         },
       });
   }
+
+  protected readonly Info = Info;
 }
