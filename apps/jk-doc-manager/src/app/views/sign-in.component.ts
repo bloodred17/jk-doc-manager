@@ -119,23 +119,21 @@ export class SignInComponent {
     );
     const auth = getAuth();
     console.log(this.signInForm);
-    // if (this.signInForm.value.email && this.signInForm.value.password) {
-    signInWithEmailAndPassword(
-      auth,
-      // this.signInForm.value.email,
-      // this.signInForm.value.password
-      'electric246blue@gmail.com',
-      'f888Hc61'
-    ).then(async (cred) => {
-      const { user } = cred;
-      const idToken = await user.getIdToken();
-      const csrfToken = 'abcd123';
-      this.authService.user.set(JSON.parse(JSON.stringify(user)));
-      this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
-        this.router.navigate(['/']);
+    if (this.signInForm.value.email && this.signInForm.value.password) {
+      signInWithEmailAndPassword(
+        auth,
+        this.signInForm.value.email,
+        this.signInForm.value.password
+      ).then(async (cred) => {
+        const { user } = cred;
+        const idToken = await user.getIdToken();
+        const csrfToken = 'abcd123';
+        this.authService.user.set(JSON.parse(JSON.stringify(user)));
+        this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
+          this.router.navigate(['/']);
+        });
       });
-    });
-    // }
+    }
   }
 
   signInWithGoogle() {
