@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   LucideAngularModule,
   MessageSquarePlus,
@@ -8,6 +8,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
 import { Router } from '@angular/router';
+import { FileService } from '../services/file.service';
 
 @Component({
   standalone: true,
@@ -19,7 +20,7 @@ import { Router } from '@angular/router';
           <tr>
             <!--            <th>ConversationID</th>-->
             <td>Name</td>
-            <td>Date</td>
+            <td class="invisible md:visible">URL</td>
             <td class="flex justify-end">
               <button class="btn btn-xs btn-secondary">
                 <lucide-icon
@@ -31,10 +32,11 @@ import { Router } from '@angular/router';
           </tr>
         </thead>
         <tbody>
-          @for (row of data; track row) {
+          @for (row of files; track row) {
           <tr>
-            <td>{{ row.filename }}</td>
-            <td>{{ row.uploadedOn | date : 'MMM, dd YYYY - HH:mm' }}</td>
+            <td>{{ row.name }}</td>
+            <td class="invisible md:visible">{{ row.url }}</td>
+            <!--            <td>{{ row.uploadedOn | date : 'MMM, dd YYYY - HH:mm' }}</td>-->
             <td class="flex justify-end gap-1">
               <button
                 class="btn btn-xs btn-primary"
@@ -45,7 +47,7 @@ import { Router } from '@angular/router';
                   class="h-4 w-4 stroke-white"
                 ></lucide-icon>
               </button>
-              <button class="btn btn-xs btn-error">
+              <button class="btn btn-xs btn-error" (click)="deleteFile(row)">
                 <lucide-icon
                   [img]="Trash"
                   class="h-4 w-4 stroke-white"
@@ -60,27 +62,36 @@ import { Router } from '@angular/router';
   `,
   imports: [LucideAngularModule, DatePipe],
 })
-export class UploadedFilesComponent {
+export class UploadedFilesComponent implements OnInit {
   conversationService = inject(ConversationService);
   router = inject(Router);
+  fileService = inject(FileService);
+  files: any[] = [];
 
-  data = [
-    {
-      filename: 'file.txt',
-      url: 'http://localhost:8080',
-      uploadedOn: new Date().toISOString(),
-    },
-  ];
   protected readonly MessageSquarePlus = MessageSquarePlus;
   protected readonly Trash = Trash;
   protected readonly Plus = Plus;
 
+  ngOnInit() {
+    this.fileService.getAllFiles().subscribe((res: any) => {
+      console.log(res);
+      this.files = res?.data;
+    });
+  }
+
   startNewConversation(row: any) {
     this.conversationService
-      .createNewConversation(row?.filename)
+      .createNewConversation(row?.name)
       .subscribe((res: any) => {
         console.log(res);
         this.router.navigate(['/ask', res?.conversation?._id]);
       });
+  }
+
+  deleteFile(row: any) {
+    this.fileService.deleteFile(row?.name).subscribe((res: any) => {
+      console.log(res);
+      this.files = this.files.filter((file) => file.name !== row.name);
+    });
   }
 }
