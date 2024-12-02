@@ -13,6 +13,7 @@ import { FirebaseService } from './firebase.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FirebaseAuthGuard } from './firebase-auth.guard';
 import { getStorage } from 'firebase-admin/storage';
+import { getAuth } from 'firebase-admin/auth';
 
 @Controller()
 export class AppController {
@@ -28,14 +29,23 @@ export class AppController {
   @Post('upload')
   @UseGuards(FirebaseAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: File, @Query('name') name: string) {
+  async uploadFile(
+    @UploadedFile() file: File,
+    @Query('name') name: string,
+    @Query('uid') uid: string
+  ) {
     try {
+      const user = await getAuth().getUser(uid);
       if (!name) {
         throw new Error('Name is required');
       }
       return {
         success: true,
-        data: await this.firebaseService.uploadToFirebase(file, name),
+        data: await this.firebaseService.uploadToFirebase(
+          file,
+          name,
+          user.email
+        ),
         description: 'File uploaded successfully',
       };
     } catch (e) {
