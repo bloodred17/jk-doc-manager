@@ -124,15 +124,14 @@ export class UserController {
     }
   }
 
-  @Post('check')
+  @Get('check')
   @UseGuards(FirebaseAuthGuard)
-  async getUsers(@Body() body: any) {
+  async getUsers() {
     try {
-      console.log(body);
-
       return {
         success: true,
-        data: '',
+        data: true,
+        description: 'Valid Session',
       };
     } catch (e) {
       return {
