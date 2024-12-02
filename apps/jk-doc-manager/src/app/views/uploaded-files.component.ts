@@ -7,6 +7,7 @@ import {
 } from 'lucide-angular';
 import { DatePipe } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -20,10 +21,7 @@ import { ConversationService } from '../services/conversation.service';
             <td>Name</td>
             <td>Date</td>
             <td class="flex justify-end">
-              <button
-                class="btn btn-xs btn-secondary"
-                (click)="startNewConversation()"
-              >
+              <button class="btn btn-xs btn-secondary">
                 <lucide-icon
                   [img]="Plus"
                   class="h-4 w-4 stroke-white"
@@ -38,7 +36,10 @@ import { ConversationService } from '../services/conversation.service';
             <td>{{ row.filename }}</td>
             <td>{{ row.uploadedOn | date : 'MMM, dd YYYY - HH:mm' }}</td>
             <td class="flex justify-end gap-1">
-              <button class="btn btn-xs btn-primary">
+              <button
+                class="btn btn-xs btn-primary"
+                (click)="startNewConversation(row)"
+              >
                 <lucide-icon
                   [img]="MessageSquarePlus"
                   class="h-4 w-4 stroke-white"
@@ -61,6 +62,8 @@ import { ConversationService } from '../services/conversation.service';
 })
 export class UploadedFilesComponent {
   conversationService = inject(ConversationService);
+  router = inject(Router);
+
   data = [
     {
       filename: 'file.txt',
@@ -72,9 +75,12 @@ export class UploadedFilesComponent {
   protected readonly Trash = Trash;
   protected readonly Plus = Plus;
 
-  startNewConversation() {
-    this.conversationService.createNewConversation().subscribe((res) => {
-      console.log(res);
-    });
+  startNewConversation(row: any) {
+    this.conversationService
+      .createNewConversation(row?.filename)
+      .subscribe((res: any) => {
+        console.log(res);
+        this.router.navigate(['/ask', res?.conversation?._id]);
+      });
   }
 }

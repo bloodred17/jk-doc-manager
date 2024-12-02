@@ -10,15 +10,20 @@ export class ConversationService {
 
   constructor(private http: HttpClient) {}
 
-  createNewConversation() {
+  createNewConversation(filename: string) {
     return this.http.post(this.domain + '/api/conversation', {
       name: 'New Conversation',
       description: 'New Conversation Description',
+      file: filename,
     });
   }
 
   getConversations() {
-    return [];
+    return this.http.get(this.domain + '/api/conversation');
+  }
+
+  getConversation(id: string) {
+    return this.http.get(this.domain + '/api/conversation/' + id);
   }
 
   sendMessage(conversationId: string) {

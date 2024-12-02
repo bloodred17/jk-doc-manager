@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ConversationService } from '../services/conversation.service';
 
 @Component({
   standalone: true,
@@ -8,7 +9,7 @@ import { DatePipe } from '@angular/common';
     <div class="flex justify-center p-2 sm:p-4 md:p-12">
       <div class="card  sm:w-[60vw] shadow">
         <ul class="card-body">
-          @for (row of data; track row) {
+          @for (row of conversations(); track row) {
           <li class="flex justify-between group">
             <a
               class="w-full cursor-pointer rounded-sm p-4 group-hover:bg-base-200 rounded-xl"
@@ -26,7 +27,7 @@ import { DatePipe } from '@angular/common';
                 </div>
               </div>
               <div class="text-sm text-gray-400 mt-0.5">
-                {{ row.date | date : "MMM dd, yyyy 'at' hh:mm a" }}
+                {{ row?.updatedAt | date : "MMM dd, yyyy 'at' hh:mm a" }}
               </div>
             </a>
           </li>
@@ -37,25 +38,15 @@ import { DatePipe } from '@angular/common';
   `,
   imports: [DatePipe],
 })
-export class ConversationHistoryComponent {
-  data = [
-    {
-      conversationID: '1asflaksjlfa4234wdsfs',
-      name: 'Conversation 1',
-      date: new Date().toISOString(),
-      file: 'Abc.txt',
-    },
-    {
-      conversationID: '1asflaksjlfa4234wdsfs',
-      name: 'Conversation 1',
-      date: new Date().toISOString(),
-      file: 'Abc.txt',
-    },
-    {
-      conversationID: '1asflaksjlfa4234wdsfs',
-      name: 'Conversation 1',
-      date: new Date().toISOString(),
-      file: 'Abc.txt',
-    },
-  ];
+export class ConversationHistoryComponent implements OnInit {
+  conversationService = inject(ConversationService);
+  conversations = signal<any[]>([]);
+  ngOnInit() {
+    this.conversationService
+      .getConversations()
+      .subscribe((conversations: any) => {
+        console.log(conversations);
+        this.conversations.set(conversations?.data);
+      });
+  }
 }

@@ -1,15 +1,18 @@
-import { prop, mongoose, getModelForClass } from '@typegoose/typegoose';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 import { ObjectId } from 'mongoose';
 import { IModelOptions } from '@typegoose/typegoose/lib/types';
 
 export class Conversation {
   _id?: ObjectId;
 
-  @prop()
+  @prop({ required: true })
   name: string;
 
   @prop()
   description: string;
+
+  @prop({ required: true })
+  file: string;
 
   @prop()
   createdAt: Date = new Date();

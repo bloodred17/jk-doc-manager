@@ -28,7 +28,7 @@ export const appRoutes: Route[] = [
         component: HomeComponent,
       },
       {
-        path: 'ask',
+        path: 'ask/:id',
         component: ConversationComponent,
       },
       {
