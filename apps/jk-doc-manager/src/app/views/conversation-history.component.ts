@@ -11,7 +11,19 @@ import { RouterLink } from '@angular/router';
     <div class="flex justify-center p-2 sm:p-4 md:p-12">
       <div class="card dark:bg-base-300 sm:w-[60vw] shadow">
         <ul class="card-body">
-          @for (row of conversations(); track row) {
+          @if (conversations()?.length === 0) {
+          <li class="flex justify-center items-center flex-wrap gap-4">
+            <div class="text-3xl font-inter text-center">
+              No Conversations to Display
+            </div>
+            <a
+              class="btn btn-lg text-xl font-inter btn-primary"
+              [routerLink]="['/new']"
+              >Click here to Start</a
+            >
+            <div></div>
+          </li>
+          } @for (row of conversations(); track row) {
           <li class="flex justify-between group relative">
             <button
               (click)="deleteConversation(row?._id)"
