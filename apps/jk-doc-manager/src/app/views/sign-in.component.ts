@@ -107,12 +107,16 @@ export class SignInComponent {
   signInForm = new FormGroup({
     email: new FormControl('', []),
     password: new FormControl('', []),
-    rememberMe: new FormControl(false),
+    rememberMe: new FormControl(false, []),
   });
 
   token = '';
 
   authenticate() {
+    localStorage.setItem(
+      'persist',
+      (this.signInForm.value.rememberMe as boolean) ? 'true' : 'false'
+    );
     const auth = getAuth();
     console.log(this.signInForm);
     // if (this.signInForm.value.email && this.signInForm.value.password) {
@@ -120,8 +124,8 @@ export class SignInComponent {
       auth,
       // this.signInForm.value.email,
       // this.signInForm.value.password
-      'ankur.611@gmail.com',
-      'some_password'
+      'electric246blue@gmail.com',
+      'f888Hc61'
     ).then(async (cred) => {
       const { user } = cred;
       const idToken = await user.getIdToken();
