@@ -15,6 +15,8 @@ export class ConversationService {
       name: 'New Conversation',
       description: 'New Conversation Description',
       file: filename,
+      bot: 'llm-bot',
+      user: JSON.parse(localStorage.getItem('user') || '{}')?.uid,
     });
   }
 
@@ -30,16 +32,18 @@ export class ConversationService {
     return this.http.delete(this.domain + '/api/conversation/' + id);
   }
 
-  sendMessage(conversationId: string) {
+  sendMessage(conversationId: string, message: string, userId: string) {
     // send logic here
-
     return new Observable((observer: Observer<any>) => {
       observer.next({
-        conversationID: 'ldkjslf92304092384',
-        userID: 'user2342',
-        createdAt: new Date().toISOString(),
-        message: 'abcd \n defdfasf',
+        success: true,
+        data: {
+          conversationID: conversationId,
+          userID: userId,
+          createdAt: new Date().toISOString(),
+          message: message,
+        },
       });
-    }).pipe(delay(30000));
+    });
   }
 }

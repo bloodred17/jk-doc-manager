@@ -17,7 +17,10 @@ import { RouterLink } from '@angular/router';
               (click)="deleteConversation(row?._id)"
               class="absolute -top-0 -right-0 btn btn-xs btn-circle btn-error invisible group-hover:visible"
             >
-              <lucide-icon [img]="Trash" class="h-3 w-3"></lucide-icon>
+              <lucide-icon
+                [img]="Trash"
+                class="h-3 w-3 stroke-white"
+              ></lucide-icon>
             </button>
             <a
               [routerLink]="['/ask', row._id]"

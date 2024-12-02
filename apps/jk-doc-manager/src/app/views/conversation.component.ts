@@ -1,16 +1,19 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ChatComponent, ChatDirection } from '../ui/chat.component';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
 import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { DialogEmulatorService } from '../services/dialog-emulator.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
   selector: 'app-conversation',
-  host: { class: '-z-[1] relative' },
+  host: { class: 'z-[1] relative' },
   template: `
     <div class="p-4 h-[91vh] w-screen ">
-      <div class="chat-box overflow-y-scroll">
+      <div class="chat-box">
         <ng-template let-text="text" #user1>
           <app-chat
             [chatDirection]="ChatDirection.Start"
@@ -34,13 +37,13 @@ import { firstValueFrom } from 'rxjs';
           ></app-chat>
         </ng-template>
 
-        @for (dialog of conversation; track dialog) { @switch (dialog.userID) {
-        @case ('user1') {
+        @for (dialog of data; track dialog) { @switch (dialog.userID) { @case
+        (conversation?.bot || 'user-1') {
         <ng-container
           [ngTemplateOutlet]="user1"
           [ngTemplateOutletContext]="{ text: dialog.message }"
         ></ng-container>
-        } @case ('user2') {
+        } @case (conversation?.user || 'user-2') {
         <ng-container
           [ngTemplateOutlet]="user2"
           [ngTemplateOutletContext]="{ text: dialog.message }"
@@ -59,6 +62,7 @@ import { firstValueFrom } from 'rxjs';
         <textarea
           class="textarea textarea-bordered w-full"
           placeholder="Ask"
+          [(ngModel)]="newMessage"
         ></textarea>
         <div class="flex items-center">
           <button
@@ -96,46 +100,90 @@ import { firstValueFrom } from 'rxjs';
       </div>
     </div>
   `,
-  imports: [ChatComponent, NgTemplateOutlet, NgClass],
+  imports: [ChatComponent, NgTemplateOutlet, NgClass, FormsModule],
   providers: [ConversationService],
 })
-export class ConversationComponent {
+export class ConversationComponent implements OnInit {
+  activateRoute = inject(ActivatedRoute);
   conversationService = inject(ConversationService);
+  dialogEmulator = inject(DialogEmulatorService);
+
   conversationID = 'ldkjslf92304092384';
   loading = false;
-  exampleConversation = {
+  exampleDialog = {
     conversationID: 'ldkjslf92304092384',
     userID: 'user1',
     createdAt: new Date().toISOString(),
     message: 'abcd \n def',
   };
-  conversation = [
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
-    { ...this.exampleConversation, userID: 'user1' },
-    { ...this.exampleConversation, userID: 'user2' },
+  conversation: any;
+  data: any[] = [
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
+    // { ...this.exampleDialog, userID: 'user1' },
+    // { ...this.exampleDialog, userID: 'user2' },
   ];
   newMessage = '';
 
+  ngOnInit() {
+    this.dialogEmulator.botDialog().subscribe((response: any) => {
+      console.log(response);
+      this.data = [...this.data, response];
+    });
+
+    this.activateRoute.params.subscribe((params) => {
+      this.conversationID = params?.['id'];
+      this.conversationService
+        .getConversation(this.conversationID)
+        .subscribe((response: any) => {
+          console.log(response);
+          this.conversation = response?.data;
+
+          this.dialogEmulator.bot.next({
+            conversationID: this.conversationID,
+            userID: this.conversation?.bot,
+            createdAt: new Date().toISOString(),
+            message: 'Hi, How can I help you?',
+          });
+        });
+    });
+  }
+
   sendMessage() {
     this.loading = true;
-    firstValueFrom(
-      this.conversationService.sendMessage(this.conversationID)
-    ).then((response) => {
+    if (this.newMessage == '') {
       this.loading = false;
+      return;
+    }
+    firstValueFrom(
+      this.conversationService.sendMessage(
+        this.conversationID,
+        this.newMessage,
+        this.conversation?.user
+      )
+    ).then((response) => {
+      this.newMessage = '';
+      this.loading = false;
+      this.data = [...this.data, response?.data];
       console.log(response);
+      this.dialogEmulator.bot.next({
+        conversationID: this.conversationID,
+        userID: this.conversation?.bot,
+        createdAt: new Date().toISOString(),
+        message: 'Bot Response',
+      });
     });
   }
 
