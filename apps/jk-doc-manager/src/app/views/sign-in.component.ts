@@ -130,7 +130,7 @@ export class SignInComponent {
       const { user } = cred;
       const idToken = await user.getIdToken();
       const csrfToken = 'abcd123';
-      localStorage.setItem('user', JSON.stringify(user));
+      this.authService.user.set(JSON.parse(JSON.stringify(user)));
       this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
         this.router.navigate(['/']);
       });
@@ -144,6 +144,7 @@ export class SignInComponent {
     signInWithPopup(auth, provider).then(async (result) => {
       const idToken = await getIdToken(result.user);
       const csrfToken = 'abcd123';
+      this.authService.user.set(JSON.parse(JSON.stringify(result.user)));
       this.authService.login({ idToken, csrfToken }).subscribe((res: any) => {
         this.router.navigate(['/']);
       });

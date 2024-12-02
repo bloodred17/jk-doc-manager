@@ -22,12 +22,15 @@ export class FileService {
     }
   }
 
-  uploadFile(formData: FormData, name: string): Observable<any> {
+  uploadFile(formData: FormData, name: string, uid: string): Observable<any> {
+    if (!uid) {
+      throw new Error('Can not upload without a valid uid');
+    }
     return this.http
       .post(`${this.domain}/api/upload`, formData, {
         reportProgress: true,
         observe: 'events',
-        params: { name },
+        params: { name, uid },
       })
       .pipe(map((event) => this.getEventData(event)));
   }

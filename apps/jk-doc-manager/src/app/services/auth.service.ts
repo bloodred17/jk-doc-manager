@@ -11,11 +11,16 @@ export class AuthService {
   isAuthenticated = signal(false);
   sessionID = '';
   router = inject(Router);
+  user = signal<any>(undefined);
 
   constructor(private http: HttpClient) {
     effect(() => {
       if (!this.isAuthenticated()) {
         this.router.navigate(['/sign-in']);
+      }
+      if (this.user()) {
+        console.log(this.user());
+        localStorage.setItem('user', JSON.stringify(this.user()));
       }
     });
   }
@@ -25,6 +30,7 @@ export class AuthService {
     return this.http.get(this.domain + '/api/user/check').pipe(
       tap((response: any) => {
         if (response?.data) {
+          this.user.set(JSON.parse(localStorage.getItem('user') || '{}'));
           this.isAuthenticated.set(true);
           this.router.navigate(['/']);
         }

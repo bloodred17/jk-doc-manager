@@ -4,6 +4,7 @@ import { FileUploadComponent } from '../ui/file-upload.component';
 import { ChatComponent, ChatDirection } from '../ui/chat.component';
 import { FileService } from '../services/file.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -39,6 +40,8 @@ import { Router } from '@angular/router';
 export class HomeComponent {
   protected readonly CloudUpload = CloudUpload;
   router = inject(Router);
+  authService = inject(AuthService);
+
   selectedFile: File | null = null;
 
   fileService = inject(FileService);
@@ -59,27 +62,30 @@ export class HomeComponent {
       type: 'uploading',
       message: 'File uploading',
     };
-    this.fileService.uploadFile(formData, this.selectedFile.name).subscribe({
-      next: (event: any) => {
-        console.log(event);
-        if (event.type === 'progress') {
-          this.uploadProgress = event.progress;
-        } else if (event.type === 'complete') {
+    const user = this.authService.user();
+    this.fileService
+      .uploadFile(formData, this.selectedFile.name, user?.uid)
+      .subscribe({
+        next: (event: any) => {
+          console.log(event);
+          if (event.type === 'progress') {
+            this.uploadProgress = event.progress;
+          } else if (event.type === 'complete') {
+            this.uploadStatus = {
+              type: 'success',
+              message: 'File uploaded successfully!',
+            };
+            this.uploadProgress = 0;
+            this.router.navigate(['/new']);
+          }
+        },
+        error: (error) => {
           this.uploadStatus = {
-            type: 'success',
-            message: 'File uploaded successfully!',
+            type: 'error',
+            message: 'Error uploading file: ' + error.message,
           };
           this.uploadProgress = 0;
-          this.router.navigate(['/new']);
-        }
-      },
-      error: (error) => {
-        this.uploadStatus = {
-          type: 'error',
-          message: 'Error uploading file: ' + error.message,
-        };
-        this.uploadProgress = 0;
-      },
-    });
+        },
+      });
   }
 }

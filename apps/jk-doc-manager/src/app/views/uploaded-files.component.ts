@@ -7,7 +7,7 @@ import {
 } from 'lucide-angular';
 import { DatePipe } from '@angular/common';
 import { ConversationService } from '../services/conversation.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FileService } from '../services/file.service';
 
 @Component({
@@ -22,12 +22,12 @@ import { FileService } from '../services/file.service';
             <td>Name</td>
             <td class="invisible md:visible">URL</td>
             <td class="flex justify-end">
-              <button class="btn btn-xs btn-secondary">
+              <a class="btn btn-xs btn-secondary" [routerLink]="['']">
                 <lucide-icon
                   [img]="Plus"
                   class="h-4 w-4 stroke-white"
                 ></lucide-icon>
-              </button>
+              </a>
             </td>
           </tr>
         </thead>
@@ -60,7 +60,7 @@ import { FileService } from '../services/file.service';
       </table>
     </div>
   `,
-  imports: [LucideAngularModule, DatePipe],
+  imports: [LucideAngularModule, DatePipe, RouterLink],
 })
 export class UploadedFilesComponent implements OnInit {
   conversationService = inject(ConversationService);
