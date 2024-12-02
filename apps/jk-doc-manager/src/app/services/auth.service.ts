@@ -20,10 +20,23 @@ export class AuthService {
     });
   }
 
+  checkSession() {
+    this.sessionID = localStorage.getItem('token') || '';
+    return this.http.get(this.domain + '/api/user/check').pipe(
+      tap((response: any) => {
+        if (response?.data) {
+          this.isAuthenticated.set(true);
+          this.router.navigate(['/']);
+        }
+      })
+    );
+  }
+
   login(body: any) {
     return this.http.post(this.domain + '/api/user/login', body).pipe(
       tap((response: any) => {
         this.sessionID = response?.data;
+        localStorage.setItem('token', this.sessionID);
         if (this.sessionID) {
           this.isAuthenticated.set(true);
         }
