@@ -50,6 +50,9 @@ export class AuthService {
 
   signOut() {
     return this.http.get(this.domain + '/api/user/logout').subscribe(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('persist');
       this.isAuthenticated.set(false);
     });
   }
