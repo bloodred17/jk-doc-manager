@@ -5,8 +5,11 @@
   "scripts": {
     "backend:build": "nx build jk-doc-manager-backend",
     "backend:start": "node dist/apps/jk-doc-manager-backend/main.js",
+    "backend:serve": "nx serve jk-doc-manager-backend",
     "frontend:build:prod": "nx build jk-doc-manager --configuration=production",
-    "frontend:deploy": "npm run frontend:build:prod && firebase deploy"
+    "frontend:deploy": "npm run frontend:build:prod && firebase deploy",
+    "frontend:serve": "nx serve jk-doc-manager",
+    "test": "nx e2e jk-doc-manager-e2e"
   },
   "private": false,
   "dependencies": {
